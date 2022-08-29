@@ -37,21 +37,21 @@ async def send_rating(movie_rating: MovieRating,
 
 
 @router.post('/send_history/')
-async def send_rating(movie_history: MovieHistory,
+async def send_history(movie_history: MovieHistory,
                       event_service: EventService = Depends(get_event_service)):
     event_service.send_history(movie_history.user_id, movie_history.movie_id, movie_history.viewed)
     return 'ok'
 
 
 @router.post('/send_bookmark/')
-async def send_rating(movie_bookmark: MovieBookmark,
+async def send_bookmark(movie_bookmark: MovieBookmark,
                       event_service: EventService = Depends(get_event_service)):
     event_service.send_bookmark(movie_bookmark.user_id, movie_bookmark.movie_id)
     return 'ok'
 
 
 @router.post('/send_last_view_time/')
-async def send_rating(movie_last_view_time: MovieLastViewTime,
+async def send_last_view_time(movie_last_view_time: MovieLastViewTime,
                       event_service: EventService = Depends(get_event_service)):
     event_service.send_last_view_time(movie_last_view_time.user_id,
                                       movie_last_view_time.movie_id,
