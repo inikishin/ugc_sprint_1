@@ -19,6 +19,7 @@ class Extract:
             bootstrap_servers=[host],
             auto_offset_reset='earliest',
             group_id='etl-clickhouse',
+            enable_auto_commit=False,
         )
         self.transform = transform
         self.load = load
@@ -74,3 +75,4 @@ class Extract:
                     TOPIC_LAST_VIEW: []
                 }
                 last_insert = time.time()
+                self.extract.commit()
