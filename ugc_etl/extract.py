@@ -6,6 +6,7 @@ from kafka.errors import NoBrokersAvailable
 
 from backoff_hdlr import backoff_hdlr
 from constants import TOPIC_BOOKMARKS, TOPIC_RATING, TOPIC_VIEWS, TOPIC_LAST_VIEW
+from config import logger
 
 
 class Extract:
@@ -52,10 +53,10 @@ class Extract:
                                                               message.value.decode('utf-8'))
                 mem_storage[TOPIC_LAST_VIEW].append(data)
             else:
-                print(f'Unknown topic: {message.topic}')
-                print('Message:')
-                print('key', message.key.decode('utf-8'))
-                print('value', message.value.decode('utf-8'))
+                logger.warning('Unknown topic: %s', message.topic)
+                logger.warning('Message:')
+                logger.warning('key: %s', message.key.decode('utf-8'))
+                logger.warning('value: %s', message.value.decode('utf-8'))
 
             # Данные в click house отправляем батчами раз в 60 секунд
             data_len = 0
