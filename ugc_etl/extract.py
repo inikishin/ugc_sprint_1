@@ -58,7 +58,11 @@ class Extract:
                 print('value', message.value.decode('utf-8'))
 
             # Данные в click house отправляем батчами раз в 60 секунд
-            if (time.time() - last_insert) > 60:
+            data_len = 0
+            for topic_values in mem_storage.values():
+                data_len += len(topic_values)
+
+            if (data_len >= 10_000) or ((time.time() - last_insert) > 60):
                 for topic in mem_storage:
                     self.load.insert_data(topic, mem_storage[topic])
 
