@@ -3,6 +3,7 @@ from clickhouse_driver import Client
 from clickhouse_driver.errors import NetworkError
 
 from backoff_hdlr import backoff_hdlr
+from constants import TOPIC_BOOKMARKS, TOPIC_RATING, TOPIC_VIEWS, TOPIC_LAST_VIEW
 
 
 class Load:
@@ -20,20 +21,33 @@ class Load:
 
     def insert_bookmark_data(self, data: list) -> None:
         self._execute(
-            "INSERT INTO bookmarks (movie_id, user_id) VALUES",
+            "INSERT INTO movies.bookmarks (movie_id, user_id) VALUES",
             data)
 
     def insert_rating_data(self, data: list) -> None:
         self._execute(
-            "INSERT INTO ratings (movie_id, user_id, rating) VALUES",
+            "INSERT INTO movies.ratings (movie_id, user_id, rating) VALUES",
             data)
 
     def insert_history_data(self, data: list) -> None:
         self._execute(
-            "INSERT INTO history (movie_id, user_id, viewed) VALUES",
+            "INSERT INTO movies.history (movie_id, user_id, viewed) VALUES",
             data)
 
     def insert_last_view_time_data(self, data: list) -> None:
         self._execute(
-            "INSERT INTO last_view_time (movie_id, user_id, paused_sec) VALUES",
+            "INSERT INTO movies.last_view_time (movie_id, user_id, paused_sec) VALUES",
             data)
+
+    def insert_data(self, topic: str, data: list) -> None:
+        if topic == TOPIC_BOOKMARKS:
+            self.insert_bookmark_data(data)
+        elif topic == TOPIC_RATING:
+            self.insert_rating_data(data)
+        elif topic == TOPIC_VIEWS:
+            self.insert_history_data(data)
+        elif topic == TOPIC_LAST_VIEW:
+            self.insert_last_view_time_data(data)
+        else:
+            raise ValueError
+
