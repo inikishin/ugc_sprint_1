@@ -20,6 +20,31 @@ services:
     networks:
       - int_net
 
+  ugc_api:
+    container_name: ugc_api
+    build:
+      context: .
+      dockerfile: ugc_api/Dockerfile
+    ports:
+      - "8000"
+    volumes:
+      - ./ugc_api/src:/data/ugc_api
+    env_file:
+      - ./ugc_api/.env
+      - ./.env
+    networks:
+      - int_net
+
+  ugc_etl:
+    container_name: ugc_etl
+    build:
+      context: .
+      dockerfile: ugc_etl/Dockerfile
+    env_file:
+      - ./ugc_etl/.env.compose
+    networks:
+      - int_net
+
   auth_api:
     container_name: auth_api
     build:
